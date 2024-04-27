@@ -14,6 +14,16 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     const numberToAlphabet = Object.fromEntries(Object.entries(alphabetToNumber).map(([k, v]) => [v, k]));
 
+    function getRandomKey(object) {
+        const keys = Object.keys(object);
+        return keys[Math.floor(Math.random() * keys.length)];
+    }
+
+    function displayRandomItem() {
+        const randomKey = Math.random() < 0.5 ? getRandomKey(alphabetToNumber) : getRandomKey(numberToAlphabet);
+        document.getElementById('randomItem').textContent = randomKey;
+    }
+
     function convertInput(input) {
         if (input >= 'a' && input <= 'z') {
             return alphabetToNumber[input];
@@ -33,14 +43,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = convertInput(input);
             resultDisplay.textContent = '結果: ' + result;
             inputField.value = ''; // 入力フィールドをクリア
+            displayRandomItem(); // 新しいランダム項目を表示
         }
     });
+
+    displayRandomItem(); // 初期ランダム項目を表示
 });
 </script>
 </head>
 <body>
 <h1>アルファベット・ナンバーゲーム</h1>
-<p>アルファベットまたは数字を入力してください（例：aまたは1）:</p>
+<p>対応するアルファベットまたは数字を入力してください。ランダムな項目: <span id="randomItem"></span></p>
 <input type="text" id="inputField" autofocus>
 <p id="resultDisplay"></p>
 </body>

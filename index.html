@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>アルファベット・ナンバーゲーム</title>
+<style>
+.correct { background-color: lightgreen; }
+.incorrect { background-color: lightcoral; }
+</style>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const alphabetToNumber = {
@@ -34,14 +38,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function updateHistoryTable(question, input, isCorrect) {
+        const table = document.getElementById('historyTable');
+        const row = table.insertRow(-1);
+        row.className = isCorrect ? 'correct' : 'incorrect';
+        row.insertCell(0).textContent = question;
+        row.insertCell(1).textContent = input;
+        row.insertCell(2).textContent = isCorrect ? '○' : '×';
+    }
+
     const inputField = document.getElementById('inputField');
     const resultDisplay = document.getElementById('resultDisplay');
 
     inputField.addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
+            const question = document.getElementById('randomItem').textContent;
             const input = inputField.value.toLowerCase();
-            const result = convertInput(input);
-            resultDisplay.textContent = '結果: ' + result;
+            const correctAnswer = convertInput(question);
+            const isCorrect = input === correctAnswer.toString();
+            updateHistoryTable(question, input, isCorrect);
+            resultDisplay.textContent = isCorrect ? '正解!' : '不正解!';
             inputField.value = ''; // 入力フィールドをクリア
             displayRandomItem(); // 新しいランダム項目を表示
         }
@@ -56,5 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <p>対応するアルファベットまたは数字を入力してください。ランダムな項目: <span id="randomItem"></span></p>
 <input type="text" id="inputField" autofocus>
 <p id="resultDisplay"></p>
+<table id="historyTable">
+<tr><th>問題</th><th>入力</th><th>正解</th></tr>
+</table>
 </body>
 </html>

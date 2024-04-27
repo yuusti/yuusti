@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>アルファベット対応ゲーム</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+        #question {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #inputField {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #submitBtn {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="question"></div>
+    <input type="text" id="inputField" />
+    <button id="submitBtn">送信</button>
+    <script>
+        const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+        let currentQuestion = '';
+
+        function generateQuestion() {
+            if (Math.random() > 0.5) {
+                // 数字を表示
+                const number = Math.floor(Math.random() * 26) + 1;
+                currentQuestion = number;
+                document.getElementById('question').textContent = '数字 ' + number + ' に対応するアルファベットは？';
+            } else {
+                // アルファベットを表示
+                const letter = alphabet[Math.floor(Math.random() * 26)];
+                currentQuestion = letter;
+                document.getElementById('question').textContent = 'アルファベット ' + letter.toUpperCase() + ' に対応する数字は？';
+            }
+        }
+
+        function checkAnswer() {
+            const input = document.getElementById('inputField').value.trim().toLowerCase();
+            const isNumberQuestion = typeof currentQuestion === 'number';
+            const correctAnswer = isNumberQuestion ? alphabet[currentQuestion - 1] : alphabet.indexOf(currentQuestion) + 1;
+
+            if (input === correctAnswer.toString()) {
+                alert('正解！');
+            } else {
+                alert('不正解。正しい答えは ' + correctAnswer + ' です。');
+            }
+            generateQuestion();
+            document.getElementById('inputField').value = '';
+        }
+
+        document.getElementById('submitBtn').addEventListener('click', checkAnswer);
+        generateQuestion();
+    </script>
+</body>
+</html>

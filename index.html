@@ -6,6 +6,7 @@
 <style>
 .correct { background-color: lightgreen; }
 .incorrect { background-color: lightcoral; }
+#historyTable { width: 100%; }
 </style>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -38,13 +39,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function updateHistoryTable(question, input, isCorrect) {
+    function updateHistoryTable(question, input, isCorrect, correctAnswer) {
         const table = document.getElementById('historyTable');
-        const row = table.insertRow(-1);
+        const row = table.insertRow(1); // 新しい行をテーブルの先頭に追加
         row.className = isCorrect ? 'correct' : 'incorrect';
         row.insertCell(0).textContent = question;
         row.insertCell(1).textContent = input;
         row.insertCell(2).textContent = isCorrect ? '○' : '×';
+        if (!isCorrect) {
+            row.insertCell(3).textContent = correctAnswer;
+        }
     }
 
     const inputField = document.getElementById('inputField');
@@ -56,8 +60,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const input = inputField.value.toLowerCase();
             const correctAnswer = convertInput(question);
             const isCorrect = input === correctAnswer.toString();
-            updateHistoryTable(question, input, isCorrect);
-            resultDisplay.textContent = isCorrect ? '正解!' : '不正解!';
+            updateHistoryTable(question, input, isCorrect, correctAnswer);
+            resultDisplay.textContent = isCorrect ? '正解!' : `不正解! 正解は ${correctAnswer} です。`;
             inputField.value = ''; // 入力フィールドをクリア
             displayRandomItem(); // 新しいランダム項目を表示
         }
@@ -73,7 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <input type="text" id="inputField" autofocus>
 <p id="resultDisplay"></p>
 <table id="historyTable">
-<tr><th>問題</th><th>入力</th><th>正解</th></tr>
+<tr><th>問題</th><th>入力</th><th>正解</th><th>正解の値</th></tr>
+<tr><td colspan="4">履歴がここに表示されます</td></tr>
 </table>
 </body>
 </html>

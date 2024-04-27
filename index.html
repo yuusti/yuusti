@@ -1,66 +1,47 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>アルファベット対応ゲーム</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding-top: 50px;
+<meta charset="UTF-8">
+<title>アルファベット・ナンバーゲーム</title>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const alphabetToNumber = {
+        'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5,
+        'f': 6, 'g': 7, 'h': 8, 'i': 9, 'j': 10,
+        'k': 11, 'l': 12, 'm': 13, 'n': 14, 'o': 15,
+        'p': 16, 'q': 17, 'r': 18, 's': 19, 't': 20,
+        'u': 21, 'v': 22, 'w': 23, 'x': 24, 'y': 25, 'z': 26
+    };
+    const numberToAlphabet = Object.fromEntries(Object.entries(alphabetToNumber).map(([k, v]) => [v, k]));
+
+    function convertInput(input) {
+        if (input >= 'a' && input <= 'z') {
+            return alphabetToNumber[input];
+        } else if (parseInt(input) >= 1 && parseInt(input) <= 26) {
+            return numberToAlphabet[parseInt(input)];
+        } else {
+            return '無効な入力';
         }
-        #question {
-            font-size: 24px;
-            margin-bottom: 20px;
+    }
+
+    const inputField = document.getElementById('inputField');
+    const resultDisplay = document.getElementById('resultDisplay');
+
+    inputField.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            const input = inputField.value.toLowerCase();
+            const result = convertInput(input);
+            resultDisplay.textContent = '結果: ' + result;
+            inputField.value = ''; // 入力フィールドをクリア
         }
-        #inputField {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        #submitBtn {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-    </style>
+    });
+});
+</script>
 </head>
 <body>
-    <div id="question"></div>
-    <input type="text" id="inputField" />
-    <button id="submitBtn">送信</button>
-    <script>
-        const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-        let currentQuestion = '';
-
-        function generateQuestion() {
-            if (Math.random() > 0.5) {
-                // 数字を表示
-                const number = Math.floor(Math.random() * 26) + 1;
-                currentQuestion = number;
-                document.getElementById('question').textContent = '数字 ' + number + ' に対応するアルファベットは？';
-            } else {
-                // アルファベットを表示
-                const letter = alphabet[Math.floor(Math.random() * 26)];
-                currentQuestion = letter;
-                document.getElementById('question').textContent = 'アルファベット ' + letter.toUpperCase() + ' に対応する数字は？';
-            }
-        }
-
-        function checkAnswer() {
-            const input = document.getElementById('inputField').value.trim().toLowerCase();
-            const isNumberQuestion = typeof currentQuestion === 'number';
-            const correctAnswer = isNumberQuestion ? alphabet[currentQuestion - 1] : alphabet.indexOf(currentQuestion) + 1;
-
-            if (input === correctAnswer.toString()) {
-                alert('正解！');
-            } else {
-                alert('不正解。正しい答えは ' + correctAnswer + ' です。');
-            }
-            generateQuestion();
-            document.getElementById('inputField').value = '';
-        }
-
-        document.getElementById('submitBtn').addEventListener('click', checkAnswer);
-        generateQuestion();
-    </script>
+<h1>アルファベット・ナンバーゲーム</h1>
+<p>アルファベットまたは数字を入力してください（例：aまたは1）:</p>
+<input type="text" id="inputField" autofocus>
+<p id="resultDisplay"></p>
 </body>
 </html>
